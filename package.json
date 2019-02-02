@@ -2,8 +2,11 @@
   "name": "BITBOX-React-Scaffold",
   "license": "MIT",
   "description": "Basic react app w/ BITBOX bindings",
-  "author": "Gabriel Cardona @ Bitcoin.com",
-  "version": "3.0.2",
+  "author": "Gabriel Cardona <gabriel@bitcoin.com>",
+  "engines": {
+    "node": ">=10.15.1"
+  },
+  "version": "3.0.8",
   "private": true,
   "dependencies": {
     "mocha": "^5.2.0",
@@ -21,7 +24,7 @@
     "coverage:report": "nyc --reporter=html mocha --require babel-core/register --timeout 5000"
   },
   "devDependencies": {
-    "bitbox-sdk": "3.0.2",
+    "bitbox-sdk": "3.0.8",
     "coveralls": "^3.0.2",
     "eslint": "^5.5.0",
     "eslint-config-prettier": "^3.0.1",

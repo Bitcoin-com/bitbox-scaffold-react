@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import logo from "./logo.png";
 
 import "./App.css";
-let BITBOXSDK = require("bitbox-sdk/lib/bitbox-sdk").default;
+let BITBOXSDK = require("bitbox-sdk");
 let BITBOX = new BITBOXSDK();
 
 let langs = [
@@ -25,7 +25,7 @@ let mnemonic = BITBOX.Mnemonic.generate(256, BITBOX.Mnemonic.wordLists()[lang]);
 let rootSeed = BITBOX.Mnemonic.toSeed(mnemonic);
 
 // master HDNode
-let masterHDNode = BITBOX.HDNode.fromSeed(rootSeed, "bitcoincash");
+let masterHDNode = BITBOX.HDNode.fromSeed(rootSeed, "mainnet");
 
 // HDNode of BIP44 account
 let account = BITBOX.HDNode.derivePath(masterHDNode, "m/44'/145'/0'");

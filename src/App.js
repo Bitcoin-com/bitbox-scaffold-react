@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import logo from "./logo.png";
 
 import "./App.css";
-let BITBOXSDK = require("bitbox-sdk");
-let BITBOX = new BITBOXSDK();
+let BITBOX = require("bitbox-sdk").BITBOX;
+let bitbox = new BITBOX();
 
 let langs = [
   "english",
@@ -19,22 +19,22 @@ let langs = [
 let lang = langs[Math.floor(Math.random() * langs.length)];
 
 // create 256 bit BIP39 mnemonic
-let mnemonic = BITBOX.Mnemonic.generate(256, BITBOX.Mnemonic.wordLists()[lang]);
+let mnemonic = bitbox.Mnemonic.generate(256, bitbox.Mnemonic.wordLists()[lang]);
 
 // root seed buffer
-let rootSeed = BITBOX.Mnemonic.toSeed(mnemonic);
+let rootSeed = bitbox.Mnemonic.toSeed(mnemonic);
 
 // master HDNode
-let masterHDNode = BITBOX.HDNode.fromSeed(rootSeed, "mainnet");
+let masterHDNode = bitbox.HDNode.fromSeed(rootSeed, "mainnet");
 
 // HDNode of BIP44 account
-let account = BITBOX.HDNode.derivePath(masterHDNode, "m/44'/145'/0'");
+let account = bitbox.HDNode.derivePath(masterHDNode, "m/44'/145'/0'");
 
 // derive the first external change address HDNode which is going to spend utxo
-let change = BITBOX.HDNode.derivePath(account, "0/0");
+let change = bitbox.HDNode.derivePath(account, "0/0");
 
 // get the cash address
-let cashAddress = BITBOX.HDNode.toCashAddress(change);
+let cashAddress = bitbox.HDNode.toCashAddress(change);
 
 class App extends Component {
   constructor(props) {
@@ -48,14 +48,14 @@ class App extends Component {
   }
 
   componentDidMount() {
-    BITBOX.Address.utxo(cashAddress).then(
+    bitbox.Address.utxo(cashAddress).then(
       result => {
         if (!result.utxos[0]) {
           return;
         }
 
         // instance of transaction builder
-        let transactionBuilder = new BITBOX.TransactionBuilder("bitcoincash");
+        let transactionBuilder = new bitbox.TransactionBuilder("mainnet");
         // original amount of satoshis in vin
         let originalAmount = result.utxos[0].satoshis;
 
@@ -69,7 +69,7 @@ class App extends Component {
         transactionBuilder.addInput(txid, vout);
 
         // get byte count to calculate fee. paying 1 sat/byte
-        let byteCount = BITBOX.BitcoinCash.getByteCount(
+        let byteCount = bitbox.BitcoinCash.getByteCount(
           { P2PKH: 1 },
           { P2PKH: 1 }
         );
@@ -81,7 +81,7 @@ class App extends Component {
         transactionBuilder.addOutput(cashAddress, sendAmount);
 
         // keypair
-        let keyPair = BITBOX.HDNode.toKeyPair(change);
+        let keyPair = bitbox.HDNode.toKeyPair(change);
 
         // sign w/ HDNode
         let redeemScript;
@@ -102,7 +102,7 @@ class App extends Component {
         });
 
         // sendRawTransaction to running BCH node
-        BITBOX.RawTransactions.sendRawTransaction(hex).then(
+        bitbox.RawTransactions.sendRawTransaction(hex).then(
           result => {
             this.setState({
               txid: result
@@ -126,7 +126,7 @@ class App extends Component {
       addresses.push(
         <li key={i}>
           m/44&rsquo;/145&rsquo;/0&rsquo;/0/
-          {i}: {BITBOX.HDNode.toCashAddress(account)}
+          {i}: {bitbox.HDNode.toCashAddress(account)}
         </li>
       );
     }

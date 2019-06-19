@@ -3,9 +3,9 @@
   "license": "MIT",
   "description": "Basic react app w/ BITBOX bindings",
   "author": "Gabriel Cardona <gabriel@bitcoin.com>",
-  "version": "7.0.15",
+  "version": "8.4.2",
   "engines": {
-    "node": ">=10.15.1"
+    "node": ">=10.15.3"
   },
   "private": true,
   "dependencies": {
@@ -24,7 +24,7 @@
     "coverage:report": "nyc --reporter=html mocha --require babel-core/register --timeout 5000"
   },
   "devDependencies": {
-    "bitbox-sdk": "7.0.15",
+    "bitbox-sdk": "8.4.2",
     "coveralls": "^3.0.2",
     "eslint": "^5.5.0",
     "eslint-config-prettier": "^3.0.1",
